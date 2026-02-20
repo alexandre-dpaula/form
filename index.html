@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#07070a" />
+  <title>Inscrição • Coral da Igreja</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/phosphor-icons@1.4.2/src/css/icons.css">
+  <style>
+    :root{
+      --bg:#07070a;
+      --panel:#0f111a;
+      --panel-2:#111827;
+      --text:#e6e7ee;
+      --muted:#9aa3b2;
+      --line:rgba(148,163,184,.14);
+      --accent:#0a5cff;
+      --accent-2:#0047ff;
+      --ok:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --shadow: 0 20px 60px rgba(0,0,0,.55);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Sora", ui-sans-serif, system-ui;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 5% -10%, rgba(148,163,184,.06), transparent 60%),
+        radial-gradient(1000px 600px at 95% -5%, rgba(148,163,184,.06), transparent 55%),
+        linear-gradient(180deg, #050509, #0b0b12 45%, #0a0a12 100%);
+      min-height:100vh;
+    }
+    .wrap{max-width:560px;margin:0 auto;padding:22px 30px 54px;position:relative;z-index:1}
+    .hero{
+      position:relative;
+      border-bottom:1px solid var(--line);
+      margin:0 0 14px;
+    }
+    .hero-img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+    .hero .wrap{padding:14px 30px 18px}
+    .form-section{
+      background: linear-gradient(180deg, rgba(12,13,18,.85), rgba(7,7,10,0));
+    }
+    .form-section .wrap{padding:20px 30px 90px}
+    header.top{
+      display:flex;flex-direction:column;gap:12px;align-items:flex-start;justify-content:flex-start;
+    }
+    .meta{
+      width:100%;display:grid;gap:8px;align-items:center;justify-items:start
+    }
+    .step-pill{
+      padding:6px 10px;border-radius:999px;border:1px solid var(--line);
+      background: rgba(12,13,18,.6);font-size:12px;color:#cbd5e1
+    }
+    .progress{
+      height:8px;border-radius:999px;background:rgba(148,163,184,.12);
+      overflow:hidden;width:100%
+    }
+    .bar{height:100%;width:0%;background:linear-gradient(90deg, var(--accent), var(--accent-2));transition:width .35s ease}
+    .pct{font-size:12px;color:var(--muted)}
+
+    .form-shell{
+      padding:6px 0 18px;
+    }
+
+    form{position:relative}
+    .step{display:none;animation:fade .25s ease;min-height:280px}
+    .step.active{display:flex;flex-direction:column;gap:6px}
+    @keyframes fade{from{opacity:.5;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+    .step h2{
+      margin:0 0 10px;font-family:"Space Grotesk", sans-serif;font-size:20px
+    }
+    .step p{margin:0 0 12px;color:var(--muted)}
+
+    label{display:block;font-size:13px;color:#cbd5e1;margin:10px 0 6px}
+    input[type="text"], input[type="tel"], select{
+      width:100%;padding:12px 12px;border-radius:999px;
+      border:1px solid rgba(148,163,184,.18);
+      background: rgba(255,255,255,.03);color:var(--text);outline:none
+    }
+    input[type="text"]:focus, input[type="tel"]:focus, select:focus{
+      border-color:rgba(10,92,255,.6);
+      box-shadow:0 0 0 3px rgba(10,92,255,.12);
+    }
+    input::placeholder{color:rgba(148,163,184,.7)}
+
+    .opts{display:grid;gap:10px}
+    .opt{
+      position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:14px;border-radius:16px;border:1px solid rgba(148,163,184,.16);
+      background: rgba(255,255,255,.02);cursor:pointer;transition:all .2s ease
+    }
+    .opt input{position:absolute;opacity:0;pointer-events:none}
+    .optText{color:#e2e8f0}
+    .optIcon{opacity:0;color:var(--accent)}
+    .opt:hover{border-color:rgba(148,163,184,.28);background: rgba(255,255,255,.04)}
+    .opt:focus-within{border-color:rgba(10,92,255,.6);box-shadow:0 0 0 3px rgba(10,92,255,.15)}
+    .opt input:checked + .optText{color:#fff}
+    .opt input:checked + .optText + .optIcon{opacity:1}
+    .opt input:checked ~ .optIcon{opacity:1}
+    .opt input:checked ~ .optText{color:#fff}
+    .opt input:checked{ }
+    .opt input:checked ~ .optIcon{color:var(--accent)}
+    .opt input:checked + .optText{font-weight:600}
+    .opt input:checked ~ .optIcon i{transform:scale(1.05)}
+    .opt input:checked ~ .optIcon{opacity:1}
+    .opt input:checked ~ .optText{color:#fff}
+    .opt:has(input:checked){
+      border-color:rgba(10,92,255,.7);
+      background: rgba(10,92,255,.16);
+    }
+
+    .subQ{margin-top:10px;display:none}
+    .subQ .tiny{font-size:12px;color:var(--muted);margin-top:6px}
+
+    .actions{
+      display:flex;flex-direction:column;gap:10px;margin-top:18px
+    }
+    .actions button, .actions .secondary{
+      width:100%;height:48px
+    }
+    button{
+      border:0;cursor:pointer;padding:12px 16px;border-radius:999px;
+      font-weight:700;color:#0b0a12;background:linear-gradient(90deg, var(--accent), var(--accent-2));
+      box-shadow: 0 8px 20px rgba(10,92,255,.25);
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      letter-spacing:.02em;transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+    }
+    #nextBtn{color:#fff}
+    button:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(10,92,255,.28)}
+    button:active{transform:translateY(0);box-shadow:0 8px 20px rgba(10,92,255,.22)}
+    button.secondary{background: rgba(148,163,184,.14);color:#e2e8f0;box-shadow:none}
+    button[disabled]{opacity:.5;cursor:not-allowed}
+
+    .err{color:#fecaca;font-size:12px;margin-top:10px;display:none}
+
+    .result{
+      margin-top:18px;padding:16px;border-radius:18px;
+      border:1px solid rgba(148,163,184,.16);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      display:none
+    }
+    .result-head{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px
+    }
+    .result-title{
+      font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)
+    }
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;
+      font-size:12px;font-weight:700;border:1px solid transparent
+    }
+    .pill.ok{background: rgba(10,92,255,.14);border-color: rgba(10,92,255,.35);color:#dbe7ff}
+    .pill.warn{background: rgba(0,71,255,.12);border-color: rgba(0,71,255,.35);color:#d6e0ff}
+    .result-body{display:flex;flex-direction:column;gap:6px}
+    .result-body strong{display:block;font-size:16px;margin:0}
+    .result-sub{color:var(--muted);line-height:1.6}
+    a.cta{
+      display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
+      width:100%;
+      padding:14px 16px;border-radius:999px;background:#16a34a;
+      color:#0b0a12;font-weight:800;margin-top:10px;box-shadow: 0 8px 20px rgba(22,163,74,.25)
+    }
+    .hint{font-size:12px;color:var(--muted);margin-top:10px}
+
+    .page-in{
+      animation: pageIn .5s ease both;
+    }
+
+    footer.site-footer{
+      position:fixed;left:0;right:0;bottom:0;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      padding:10px 0;
+      background: rgba(7,7,10,.7);
+      border-top:1px solid var(--line);
+      backdrop-filter: blur(6px);
+      z-index:2;
+    }
+
+    @media (min-width:720px){
+      .wrap{max-width:560px}
+    }
+  </style>
+</head>
+<body>
+  <section class="hero page-in">
+    <img class="hero-img" src="bg.png" alt="" aria-hidden="true" />
+    <div class="wrap">
+      <header class="top">
+        <div class="meta">
+          <div class="step-pill">Etapa <span id="stepNum">1</span>/<span id="stepTotal">6</span></div>
+          <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+          <div class="pct" id="pct">0%</div>
+        </div>
+      </header>
+    </div>
+  </section>
+
+  <section class="form-section page-in">
+    <div class="wrap">
+      <main class="form-shell" aria-label="Formulário">
+        <form id="leadForm" novalidate>
+          <section class="step active" data-step="0">
+          <h2><i class="ph ph-user-circle"></i> Seus dados</h2>
+          <p>Essas informações ajudam no primeiro contato.</p>
+          <label for="name">Seu nome</label>
+          <input id="name" name="name" type="text" placeholder="Ex: Maria Silva" required />
+
+          <label for="whats">WhatsApp</label>
+          <input id="whats" name="whats" type="tel" placeholder="DDD + número (ex: 27 99999-9999)" required />
+          <div class="err stepErr">Preencha nome e WhatsApp corretamente.</div>
+        </section>
+
+        <section class="step" data-step="1">
+          <h2><i class="ph ph-church"></i> 1) Você faz parte ou já fez parte do MMG?</h2>
+          <div class="opts" role="radiogroup" aria-label="MMG">
+            <label class="opt">
+              <input type="radio" name="mmg" value="atual" required />
+              <span class="optText">Sim, faço parte atualmente</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="mmg" value="antes" />
+              <span class="optText">Já fiz parte antes</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="mmg" value="nunca" />
+              <span class="optText">Nunca participei</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+          </div>
+          <div class="err stepErr">Selecione uma opção.</div>
+        </section>
+
+        <section class="step" data-step="2">
+          <h2><i class="ph ph-microphone-stage"></i> 2) Você já cantou em coral ou grupo vocal?</h2>
+          <div class="opts" role="radiogroup" aria-label="Experiência em coral">
+            <label class="opt">
+              <input type="radio" name="choir" value="sim" required />
+              <span class="optText">Sim</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="choir" value="nao" />
+              <span class="optText">Não</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+          </div>
+
+          <div class="subQ" id="choirTimeWrap">
+            <label for="choirTime">Se sim, por quanto tempo?</label>
+            <select id="choirTime" name="choirTime">
+              <option value="">Selecione</option>
+              <option value="lt6">Menos de 6 meses</option>
+              <option value="6-12">6 a 12 meses</option>
+              <option value="1-3">1 a 3 anos</option>
+              <option value="3p">Mais de 3 anos</option>
+            </select>
+            <div class="tiny">Isso ajuda a te posicionar melhor na voz correta.</div>
+          </div>
+          <div class="err stepErr">Selecione uma opção e, se sim, informe o tempo.</div>
+        </section>
+
+        <section class="step" data-step="3">
+          <h2><i class="ph ph-waveform"></i> 3) Quando a música muda de tom, você acompanha sem travar?</h2>
+          <div class="opts" role="radiogroup" aria-label="Mudança de tom">
+            <label class="opt">
+              <input type="radio" name="pitch" value="bem" required />
+              <span class="optText">Sim, acompanho bem</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="pitch" value="asvezes" />
+              <span class="optText">Às vezes tenho dificuldade</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="pitch" value="muito" />
+              <span class="optText">Tenho muita dificuldade</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+          </div>
+          <div class="err stepErr">Selecione uma opção.</div>
+        </section>
+
+        <section class="step" data-step="4">
+          <h2><i class="ph ph-music-notes"></i> 4) Qual é a sua voz (se souber)?</h2>
+          <div class="opts" role="radiogroup" aria-label="Voz">
+            <label class="opt">
+              <input type="radio" name="voice" value="soprano" required />
+              <span class="optText">Soprano</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="voice" value="contralto" />
+              <span class="optText">Contralto</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="voice" value="tenor" />
+              <span class="optText">Tenor</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="voice" value="baixo" />
+              <span class="optText">Baixo</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="voice" value="naosei" />
+              <span class="optText">Não sei</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+          </div>
+          <div class="err stepErr">Selecione uma opção.</div>
+        </section>
+
+        <section class="step" data-step="5">
+          <h2><i class="ph ph-calendar"></i> 5) Você tem disponibilidade para ensaio semanal?</h2>
+          <div class="opts" role="radiogroup" aria-label="Disponibilidade">
+            <label class="opt">
+              <input type="radio" name="avail" value="sim" required />
+              <span class="optText">Sim</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="avail" value="depende" />
+              <span class="optText">Depende</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="avail" value="nao" />
+              <span class="optText">Não</span>
+              <span class="optIcon"><i class="ph ph-check-circle"></i></span>
+            </label>
+          </div>
+          <div class="err stepErr">Selecione uma opção.</div>
+        </section>
+
+        <div class="actions">
+          <button type="button" class="secondary" id="prevBtn">Voltar</button>
+          <button type="button" id="nextBtn">Continuar</button>
+          <button type="submit" id="submitBtn">Ver resultado <i class="ph ph-arrow-right"></i></button>
+        </div>
+
+        <div class="err" id="err">Preencha os dados e responda todas as perguntas.</div>
+
+        <div class="result" id="result">
+          <div class="result-head">
+            <div class="pill" id="pill"></div>
+            <div class="result-title">Resultado</div>
+          </div>
+          <div class="result-body" id="resultText"></div>
+          <a class="cta" id="cta" href="#" target="_blank" rel="noopener">
+            <i class="ph ph-phone-call"></i> Falar no WhatsApp
+          </a>
+          <div class="hint" id="hint"></div>
+        </div>
+        </form>
+      </main>
+    </div>
+  </section>
+
+  <footer class="site-footer">Alexandre Siqueira de Paula - MMG</footer>
+
+  <script>
+    // ====== CONFIGURE AQUI ======
+    const LEADER_NUMBER = "27998721786"; // ex: 5527999999999
+    const GROUP_INVITE_LINK = "lhttps://chat.whatsapp.com/BYO5uciuxgXAbp7fSqSNEF?mode=gi_t"; // ex: https://chat.whatsapp.com/XXXX
+    // ============================
+
+    const form = document.getElementById("leadForm");
+    const bar = document.getElementById("bar");
+    const pct = document.getElementById("pct");
+    const stepNum = document.getElementById("stepNum");
+    const stepTotal = document.getElementById("stepTotal");
+    const err = document.getElementById("err");
+    const result = document.getElementById("result");
+    const pill = document.getElementById("pill");
+    const resultText = document.getElementById("resultText");
+    const cta = document.getElementById("cta");
+    const hint = document.getElementById("hint");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const choirTimeWrap = document.getElementById("choirTimeWrap");
+    const choirTime = document.getElementById("choirTime");
+
+    const steps = Array.from(document.querySelectorAll(".step"));
+    let currentStep = 0;
+
+    function digitsOnly(s){ return (s || "").replace(/\D/g, ""); }
+
+    function normalizeBRPhone(input){
+      const d = digitsOnly(input);
+      if(!d) return "";
+      if(d.startsWith("55") && d.length >= 12) return d;
+      if(d.length === 10 || d.length === 11) return "55" + d;
+      return d.length >= 12 ? d : "";
+    }
+
+    function getRadio(name){
+      const el = form.querySelector(`input[name="${name}"]:checked`);
+      return el ? el.value : "";
+    }
+
+    function updateProgress(){
+      stepTotal.textContent = steps.length;
+      stepNum.textContent = Math.min(currentStep + 1, steps.length);
+      const p = Math.round((currentStep / (steps.length - 1)) * 100);
+      bar.style.width = p + "%";
+      pct.textContent = p + "%";
+    }
+
+    function showStep(i){
+      steps.forEach((s, idx) => s.classList.toggle("active", idx === i));
+      prevBtn.style.display = i === 0 ? "none" : "inline-flex";
+      nextBtn.style.display = i === steps.length - 1 ? "none" : "inline-flex";
+      submitBtn.style.display = i === steps.length - 1 ? "inline-flex" : "none";
+      err.style.display = "none";
+      updateProgress();
+    }
+
+    function showStepError(i, show){
+      const step = steps[i];
+      const stepErr = step ? step.querySelector(".stepErr") : null;
+      if(stepErr) stepErr.style.display = show ? "block" : "none";
+    }
+
+    function validateStep(i){
+      showStepError(i, false);
+
+      if(i === 0){
+        const nameOk = form.name.value.trim().length > 1;
+        const phoneOk = !!normalizeBRPhone(form.whats.value);
+        const ok = nameOk && phoneOk;
+        if(!ok) showStepError(i, true);
+        return ok;
+      }
+      if(i === 1){
+        const ok = !!getRadio("mmg");
+        if(!ok) showStepError(i, true);
+        return ok;
+      }
+      if(i === 2){
+        const choirVal = getRadio("choir");
+        const ok = !!choirVal && (choirVal === "nao" || (choirVal === "sim" && !!choirTime.value));
+        if(!ok) showStepError(i, true);
+        return ok;
+      }
+      if(i === 3){
+        const ok = !!getRadio("pitch");
+        if(!ok) showStepError(i, true);
+        return ok;
+      }
+      if(i === 4){
+        const ok = !!getRadio("voice");
+        if(!ok) showStepError(i, true);
+        return ok;
+      }
+      if(i === 5){
+        const ok = !!getRadio("avail");
+        if(!ok) showStepError(i, true);
+        return ok;
+      }
+      return true;
+    }
+
+    form.addEventListener("input", () => {
+      const choirVal = getRadio("choir");
+      if(choirVal === "sim"){
+        choirTimeWrap.style.display = "block";
+      } else {
+        choirTimeWrap.style.display = "none";
+        choirTime.value = "";
+      }
+    });
+
+    prevBtn.addEventListener("click", () => {
+      if(currentStep > 0){
+        currentStep -= 1;
+        showStep(currentStep);
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if(validateStep(currentStep)){
+        currentStep = Math.min(currentStep + 1, steps.length - 1);
+        showStep(currentStep);
+      }
+    });
+
+    function buildMessage(data, decision){
+      const mmgMap = { atual:"Sim (atual)", antes:"Já fez parte", nunca:"Nunca" };
+      const choirMap = { sim:"Sim", nao:"Não" };
+      const pitchMap = { bem:"Acompanha bem", asvezes:"Às vezes", muito:"Muita dificuldade" };
+      const availMap = { sim:"Sim", depende:"Depende", nao:"Não" };
+      const voiceMap = { soprano:"Soprano", contralto:"Contralto", tenor:"Tenor", baixo:"Baixo", naosei:"Não sei" };
+
+      return (
+`Olá! Sou ${data.name}
+Quero participar do Coral.
+
+Resumo:
+- MMG: ${mmgMap[data.mmg] || "-"}
+- Coral/Grupo vocal: ${choirMap[data.choir] || "-"}${data.choir==="sim" && data.choirTime ? ` (${data.choirTime})` : ""}
+- Mudança de tom: ${pitchMap[data.pitch] || "-"}
+- Voz: ${voiceMap[data.voice] || "-"}
+- Ensaio semanal: ${availMap[data.avail] || "-"}
+
+Direcionamento do formulário: ${decision}
+`
+      );
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      err.style.display = "none";
+      result.style.display = "none";
+
+      if(!validateStep(currentStep)) return;
+
+      const name = form.name.value.trim();
+      const phone = normalizeBRPhone(form.whats.value);
+      const data = {
+        name,
+        phone,
+        mmg: getRadio("mmg"),
+        choir: getRadio("choir"),
+        choirTime: choirTime.value,
+        pitch: getRadio("pitch"),
+        voice: getRadio("voice"),
+        avail: getRadio("avail"),
+      };
+
+      const ok =
+        name.length > 1 &&
+        !!phone &&
+        data.mmg && data.choir && data.pitch && data.voice && data.avail &&
+        (data.choir !== "sim" || !!data.choirTime);
+
+      if(!ok){
+        err.style.display = "block";
+        return;
+      }
+
+      const hasBackground = (data.choir === "sim") || (data.mmg === "atual") || (data.mmg === "antes");
+      const pitchOk = data.pitch !== "muito";
+      const approved = (data.avail === "sim") && hasBackground && pitchOk;
+
+      if(approved){
+        pill.className = "pill ok";
+        pill.textContent = "Acesso direto";
+        resultText.innerHTML = `
+          <strong>Olá ${name}!</strong>
+          <div class="result-sub">Cadastro confirmado. Você já pode entrar no grupo do coral para receber horários, repertório e próximos passos.</div>
+        `;
+        cta.textContent = "Entrar no grupo do Coral";
+        cta.href = GROUP_INVITE_LINK || "#";
+        hint.textContent = "Se o link não abrir, fale comigo no WhatsApp que eu te adiciono.";
+      } else {
+        pill.className = "pill warn";
+        pill.textContent = "Contato rápido";
+        resultText.innerHTML = `
+          <strong>Olá ${name}!</strong>
+          <div class="result-sub">Antes de entrar no grupo, precisamos alinhar voz, base e rotina de ensaio. É rápido.</div>
+        `;
+        const msg = buildMessage(data, "Conversa com você primeiro");
+        cta.textContent = "Falar no WhatsApp";
+        cta.href = `https://wa.me/${LEADER_NUMBER}?text=${encodeURIComponent(msg)}`;
+        hint.textContent = "Contato direto para orientação.";
+      }
+
+      result.style.display = "block";
+    });
+
+    // init
+    showStep(currentStep);
+  </script>
+</body>
+</html>
