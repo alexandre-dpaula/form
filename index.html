@@ -2,9 +2,24 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#07070a" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#07070a" />
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#07070a" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Inscrição • Coral da Igreja</title>
+  <meta property="og:title" content="Coral da Igreja" />
+  <meta property="og:description" content="Inscrição do Coral Graça e Paz" />
+  <meta property="og:image" content="https://form-chi-sable.vercel.app/bg.png?v=2" />
+  <meta property="og:image:secure_url" content="https://form-chi-sable.vercel.app/bg.png?v=2" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1116" />
+  <meta property="og:image:height" content="484" />
+  <meta property="og:url" content="https://form-chi-sable.vercel.app" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -26,6 +41,9 @@
       --radius:18px;
     }
     *{box-sizing:border-box}
+    html, body{
+      background-color:#07070a;
+    }
     body{
       margin:0;
       font-family:"Sora", ui-sans-serif, system-ui;
@@ -56,8 +74,12 @@
       display:flex;flex-direction:column;gap:12px;align-items:flex-start;justify-content:flex-start;
     }
     .meta{
-      width:100%;display:grid;gap:8px;align-items:center;justify-items:start
+      width:100%;display:grid;gap:8px;align-items:center;
+      grid-template-columns: 1fr auto;
     }
+    .progress{grid-column:1 / -1}
+    .pct{text-align:left}
+    .step-pill{text-align:right}
     .step-pill{
       padding:6px 10px;border-radius:999px;border:1px solid var(--line);
       background: rgba(12,13,18,.6);font-size:12px;color:#cbd5e1
@@ -88,8 +110,10 @@
     input[type="text"], input[type="tel"], select{
       width:100%;padding:12px 12px;border-radius:999px;
       border:1px solid rgba(148,163,184,.18);
-      background: rgba(255,255,255,.03);color:var(--text);outline:none
+      background: rgba(255,255,255,.03);color:var(--text);outline:none;
+      font-size:16px;
     }
+    .dob-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
     input[type="text"]:focus, input[type="tel"]:focus, select:focus{
       border-color:rgba(10,92,255,.6);
       box-shadow:0 0 0 3px rgba(10,92,255,.12);
@@ -123,7 +147,7 @@
     }
 
     .subQ{margin-top:10px;display:none}
-    .subQ .tiny{font-size:12px;color:var(--muted);margin-top:6px}
+    .tiny{font-size:12px;color:var(--muted);margin-top:6px}
 
     .actions{
       display:flex;flex-direction:column;gap:10px;margin-top:18px
@@ -184,12 +208,87 @@
       text-align:center;
       color:var(--muted);
       font-size:12px;
-      padding:10px 0;
+      padding:10px 0 calc(10px + env(safe-area-inset-bottom));
       background: rgba(7,7,10,.7);
       border-top:1px solid var(--line);
       backdrop-filter: blur(6px);
       z-index:2;
     }
+
+    @supports (-webkit-touch-callout: none){
+      body{padding-bottom: env(safe-area-inset-bottom);}
+      .form-section{padding-bottom: env(safe-area-inset-bottom);}
+    }
+
+    .modal{
+      position:fixed;inset:0;display:none;place-items:center;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(6px);
+      z-index:4;
+      padding:20px;
+    }
+    .modal.open{display:grid}
+    .modal-card{
+      width:100%;max-width:420px;
+      background: linear-gradient(180deg, rgba(18,20,28,.98), rgba(12,14,20,.98));
+      border:1px solid rgba(148,163,184,.18);
+      border-radius:20px;
+      box-shadow: var(--shadow);
+      padding:18px;
+      display:grid;gap:12px;
+      text-align:left;
+      position:relative;
+    }
+    .modal-head{
+      display:flex;gap:10px;align-items:center;
+    }
+    .modal-icon{
+      width:40px;height:40px;border-radius:999px;
+      display:grid;place-items:center;
+      background: rgba(10,92,255,.12);
+      color:var(--accent);
+      font-size:20px;
+      border:1px solid rgba(10,92,255,.25);
+      overflow:hidden;
+    }
+    .modal-icon.danger{
+      background: rgba(239,68,68,.12);
+      color:#fecaca;
+      border-color: rgba(239,68,68,.35);
+    }
+    .avatar{
+      width:100%;height:100%;object-fit:cover;display:block;
+    }
+    .modal-title{font-size:16px;font-weight:700}
+    .modal-sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .modal-text{color:var(--muted);line-height:1.6}
+    .modal-actions{display:flex;gap:10px}
+    .modal-actions .secondary{width:100%}
+    .score-pill{
+      margin-left:auto;
+      padding:4px 8px;border-radius:999px;
+      font-size:11px;font-weight:700;
+      border:1px solid transparent;
+      display:flex;align-items:baseline;gap:4px;
+    }
+    .score-label{opacity:.85}
+    .score-val{font-size:14px;font-weight:800}
+    .score-unit{font-size:11px;font-weight:300;opacity:.8}
+    .score-pill.low{background: rgba(239,68,68,.12);color:#fecaca;border-color: rgba(239,68,68,.35)}
+    .score-pill.mid{background: rgba(255,255,255,.08);color:#f8fafc;border-color: rgba(148,163,184,.25)}
+    .score-pill.high{background: rgba(34,197,94,.14);color:#bbf7d0;border-color: rgba(34,197,94,.35)}
+    .modal-close{
+      position:absolute;top:10px;right:10px;
+      width:32px;height:32px;border-radius:999px;
+      border:1px solid rgba(148,163,184,.18);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      display:grid;place-items:center;
+      cursor:pointer;
+    }
+
+    .result-modal .modal-card{max-width:520px}
+    .result-modal .modal-actions{flex-direction:column}
 
     @media (min-width:720px){
       .wrap{max-width:560px}
@@ -222,7 +321,22 @@
 
           <label for="whats">WhatsApp</label>
           <input id="whats" name="whats" type="tel" placeholder="DDD + número (ex: 27 99999-9999)" required />
+          
+          <label for="dobDay">Data de nascimento</label>
+          <div class="dob-grid">
+            <select id="dobDay" name="dobDay" required>
+              <option value="">Dia</option>
+            </select>
+            <select id="dobMonth" name="dobMonth" required>
+              <option value="">Mês</option>
+            </select>
+            <select id="dobYear" name="dobYear" required>
+              <option value="">Ano</option>
+            </select>
+          </div>
+
           <div class="err stepErr">Preencha nome e WhatsApp corretamente.</div>
+          <div class="err dobErr">Selecione a data de nascimento.</div>
         </section>
 
         <section class="step" data-step="1">
@@ -355,7 +469,6 @@
         <div class="actions">
           <button type="button" class="secondary" id="prevBtn">Voltar</button>
           <button type="button" id="nextBtn">Continuar</button>
-          <button type="submit" id="submitBtn">Ver resultado <i class="ph ph-arrow-right"></i></button>
         </div>
 
         <div class="err" id="err">Preencha os dados e responda todas as perguntas.</div>
@@ -378,10 +491,52 @@
 
   <footer class="site-footer">Alexandre Siqueira de Paula - MMG</footer>
 
+  <div class="modal" id="ageModal" role="dialog" aria-modal="true" aria-labelledby="ageModalTitle">
+    <div class="modal-card">
+      <button class="modal-close" id="ageModalClose" aria-label="Fechar"><i class="ph ph-x"></i></button>
+      <div class="modal-head">
+        <div class="modal-icon">
+          <img class="avatar" src="mery.jpeg" alt="Tia Mery" />
+        </div>
+        <div class="modal-title" id="ageModalTitle">Falar com Tia Mery</div>
+      </div>
+      <div class="modal-text">Para você que tem menos de 12 anos, a inscrição é feita diretamente com a Tia Mery. Clique no botão abaixo para conversar com ela.</div>
+      <div class="modal-actions">
+        <a class="cta" href="https://wa.me/27996187340" target="_blank" rel="noopener">
+          <i class="ph ph-whatsapp-logo"></i> Falar no WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal result-modal" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultModalTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-icon" id="resultModalIcon"><i class="ph ph-check-circle"></i></div>
+        <div>
+          <div class="modal-title" id="resultModalTitle">Resultado</div>
+          <div class="modal-sub" id="resultModalSub"></div>
+        </div>
+        <div class="score-pill" id="scorePill">Nota 0/10</div>
+      </div>
+      <div class="result-body" id="resultTextModal"></div>
+      <div class="modal-actions">
+        <a class="cta" id="ctaModal" href="#" target="_blank" rel="noopener">
+          <i class="ph ph-phone-call"></i> Falar no WhatsApp
+        </a>
+        <button type="button" class="secondary" id="resultModalClose">Fechar</button>
+      </div>
+      <div class="hint" id="hintModal"></div>
+    </div>
+  </div>
+
   <script>
     // ====== CONFIGURE AQUI ======
-    const LEADER_NUMBER = "27998721786"; // ex: 5527999999999
-    const GROUP_INVITE_LINK = "lhttps://chat.whatsapp.com/BYO5uciuxgXAbp7fSqSNEF?mode=gi_t"; // ex: https://chat.whatsapp.com/XXXX
+    const GROUP_INVITE_LINK = "https://chat.whatsapp.com/CBSgRJlUCBFE4hrytjMrPB?mode=gi_t"; // ex: https://chat.whatsapp.com/XXXX
+    const CONTACTS = {
+      xandy: { name: "Xandy", phone: "27998721786", avatar: "xandy.png" },
+      mery: { name: "Tia Mery", phone: "27996187340", avatar: "mery.jpeg" }
+    };
     // ============================
 
     const form = document.getElementById("leadForm");
@@ -395,11 +550,25 @@
     const resultText = document.getElementById("resultText");
     const cta = document.getElementById("cta");
     const hint = document.getElementById("hint");
+    const resultModal = document.getElementById("resultModal");
+    const resultModalIcon = document.getElementById("resultModalIcon");
+    const resultModalTitle = document.getElementById("resultModalTitle");
+    const resultModalSub = document.getElementById("resultModalSub");
+    const scorePill = document.getElementById("scorePill");
+    const resultTextModal = document.getElementById("resultTextModal");
+    const ctaModal = document.getElementById("ctaModal");
+    const hintModal = document.getElementById("hintModal");
+    const resultModalClose = document.getElementById("resultModalClose");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
     const submitBtn = document.getElementById("submitBtn");
     const choirTimeWrap = document.getElementById("choirTimeWrap");
     const choirTime = document.getElementById("choirTime");
+    const ageModal = document.getElementById("ageModal");
+    const ageModalClose = document.getElementById("ageModalClose");
+    const dobDay = document.getElementById("dobDay");
+    const dobMonth = document.getElementById("dobMonth");
+    const dobYear = document.getElementById("dobYear");
 
     const steps = Array.from(document.querySelectorAll(".step"));
     let currentStep = 0;
@@ -412,6 +581,62 @@
       if(d.startsWith("55") && d.length >= 12) return d;
       if(d.length === 10 || d.length === 11) return "55" + d;
       return d.length >= 12 ? d : "";
+    }
+
+    function clamp(n, min, max){
+      return Math.max(min, Math.min(max, n));
+    }
+
+    function calcScore(data){
+      let score = 3;
+      if(data.avail === "sim") score += 2;
+      if(data.avail === "depende") score += 1;
+      if(data.mmg === "atual") score += 1;
+      if(data.mmg === "antes") score += 1;
+      if(data.choir === "sim") score += 1;
+      if(data.choirTime === "6-12") score += 1;
+      if(data.choirTime === "1-3") score += 2;
+      if(data.choirTime === "3p") score += 3;
+      if(data.pitch === "bem") score += 2;
+      if(data.pitch === "asvezes") score += 1;
+      if(data.pitch === "muito") score -= 1;
+      if(data.voice !== "naosei") score += 1;
+      return clamp(score, 3, 10);
+    }
+
+    function openWhatsApp(phone, text){
+      const enc = encodeURIComponent(text || "");
+      const api = `https://api.whatsapp.com/send?phone=${phone}${text ? `&text=${enc}` : ""}`;
+      const wa = `https://wa.me/${phone}${text ? `?text=${enc}` : ""}`;
+      const isAndroid = /Android/i.test(navigator.userAgent || "");
+
+      if(isAndroid && text){
+        const intent = `intent://send?phone=${phone}&text=${enc}#Intent;scheme=whatsapp;package=com.whatsapp;end`;
+        window.location.href = intent;
+        setTimeout(() => { window.location.href = api; }, 700);
+        return;
+      }
+      window.open(wa, "_blank");
+    }
+
+    function getDobISO(){
+      if(!dobDay || !dobMonth || !dobYear) return "";
+      const d = parseInt(dobDay.value, 10);
+      const m = parseInt(dobMonth.value, 10);
+      const y = parseInt(dobYear.value, 10);
+      if(!d || !m || !y) return "";
+      const date = new Date(y, m - 1, d);
+      if(date.getFullYear() !== y || date.getMonth() !== (m - 1) || date.getDate() !== d) return "";
+      return `${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    }
+
+    function isAtLeast12(dobStr){
+      if(!dobStr) return false;
+      const dob = new Date(dobStr + "T00:00:00");
+      if(Number.isNaN(dob.getTime())) return false;
+      const today = new Date();
+      const cutoff = new Date(today.getFullYear() - 12, today.getMonth(), today.getDate());
+      return dob <= cutoff;
     }
 
     function getRadio(name){
@@ -429,9 +654,9 @@
 
     function showStep(i){
       steps.forEach((s, idx) => s.classList.toggle("active", idx === i));
-      prevBtn.style.display = i === 0 ? "none" : "inline-flex";
-      nextBtn.style.display = i === steps.length - 1 ? "none" : "inline-flex";
-      submitBtn.style.display = i === steps.length - 1 ? "inline-flex" : "none";
+      if(prevBtn) prevBtn.style.display = i === 0 ? "none" : "inline-flex";
+      if(nextBtn) nextBtn.style.display = i === 0 ? "inline-flex" : "none";
+      if(submitBtn) submitBtn.style.display = "none";
       err.style.display = "none";
       updateProgress();
     }
@@ -441,15 +666,44 @@
       const stepErr = step ? step.querySelector(".stepErr") : null;
       if(stepErr) stepErr.style.display = show ? "block" : "none";
     }
+    function showAgeModal(){
+      if(ageModal) ageModal.classList.add("open");
+    }
+    function hideAgeModal(){
+      if(ageModal) ageModal.classList.remove("open");
+    }
+    function showResultModal(){
+      if(resultModal) resultModal.classList.add("open");
+    }
+    function hideResultModal(){
+      if(resultModal) resultModal.classList.remove("open");
+    }
 
     function validateStep(i){
       showStepError(i, false);
-
+      const step = steps[i];
       if(i === 0){
         const nameOk = form.name.value.trim().length > 1;
         const phoneOk = !!normalizeBRPhone(form.whats.value);
-        const ok = nameOk && phoneOk;
-        if(!ok) showStepError(i, true);
+        const dobStr = getDobISO();
+        const dobFilled = !!(dobDay && dobDay.value && dobMonth && dobMonth.value && dobYear && dobYear.value);
+        const ageOk = isAtLeast12(dobStr);
+        const dobErr = step ? step.querySelector(".dobErr") : null;
+        if(dobErr) dobErr.style.display = "none";
+        const ok = nameOk && phoneOk && ageOk;
+        if(!(nameOk && phoneOk)) showStepError(i, true);
+        if(!dobFilled && dobErr) dobErr.style.display = "block";
+        if(dobFilled && !dobStr && dobErr) {
+          dobErr.textContent = "Data inválida. Verifique o dia, mês e ano.";
+          dobErr.style.display = "block";
+          return false;
+        }
+        if(dobFilled && dobStr) {
+          dobErr.textContent = "Selecione a data de nascimento.";
+        }
+        if(dobFilled && dobStr && !ageOk){
+          showAgeModal();
+        }
         return ok;
       }
       if(i === 1){
@@ -489,6 +743,36 @@
         choirTimeWrap.style.display = "none";
         choirTime.value = "";
       }
+
+      if(currentStep === 0){
+        // Avança manualmente no botão "Continuar"
+        return;
+      }
+    });
+
+    form.addEventListener("change", (e) => {
+      const step = steps[currentStep];
+      if(!step || !step.contains(e.target)) return;
+
+      if(currentStep === 0){
+        return;
+      }
+
+      if(e.target.matches('input[type="radio"]')){
+        if(currentStep === 2){
+          const choirVal = getRadio("choir");
+          if(choirVal === "sim" && !choirTime.value) return;
+        }
+        if(currentStep === steps.length - 1){
+          form.requestSubmit();
+        } else {
+          tryAutoAdvance();
+        }
+      }
+
+      if(currentStep === 2 && e.target === choirTime && choirTime.value){
+        if(getRadio("choir") === "sim") tryAutoAdvance();
+      }
     });
 
     prevBtn.addEventListener("click", () => {
@@ -498,12 +782,21 @@
       }
     });
 
-    nextBtn.addEventListener("click", () => {
-      if(validateStep(currentStep)){
-        currentStep = Math.min(currentStep + 1, steps.length - 1);
-        showStep(currentStep);
-      }
-    });
+    function tryAutoAdvance(){
+      if(currentStep >= steps.length - 1) return;
+      if(!validateStep(currentStep)) return;
+      currentStep = Math.min(currentStep + 1, steps.length - 1);
+      showStep(currentStep);
+    }
+
+    if(nextBtn){
+      nextBtn.addEventListener("click", () => {
+        if(validateStep(currentStep)){
+          currentStep = Math.min(currentStep + 1, steps.length - 1);
+          showStep(currentStep);
+        }
+      });
+    }
 
     function buildMessage(data, decision){
       const mmgMap = { atual:"Sim (atual)", antes:"Já fez parte", nunca:"Nunca" };
@@ -551,45 +844,133 @@ Direcionamento do formulário: ${decision}
       const ok =
         name.length > 1 &&
         !!phone &&
+        isAtLeast12(getDobISO()) &&
         data.mmg && data.choir && data.pitch && data.voice && data.avail &&
         (data.choir !== "sim" || !!data.choirTime);
 
       if(!ok){
         err.style.display = "block";
+        if(getDobISO() && !isAtLeast12(getDobISO())) showAgeModal();
         return;
       }
 
-      const hasBackground = (data.choir === "sim") || (data.mmg === "atual") || (data.mmg === "antes");
-      const pitchOk = data.pitch !== "muito";
-      const approved = (data.avail === "sim") && hasBackground && pitchOk;
+      const score = calcScore(data);
+      scorePill.innerHTML = `<span class="score-label">Nota</span> <span class="score-val">${score}</span><span class="score-unit">/10</span>`;
+      scorePill.className = "score-pill";
 
-      if(approved){
+      if(score >= 9){
+        resultModalIcon.className = "modal-icon";
+        scorePill.classList.add("high");
         pill.className = "pill ok";
         pill.textContent = "Acesso direto";
+        resultModalIcon.innerHTML = '<i class="ph ph-check-circle"></i>';
+        resultModalTitle.textContent = "Direto para o grupo";
+        resultModalSub.textContent = "Aprovado no fluxo principal";
         resultText.innerHTML = `
           <strong>Olá ${name}!</strong>
           <div class="result-sub">Cadastro confirmado. Você já pode entrar no grupo do coral para receber horários, repertório e próximos passos.</div>
         `;
+        resultTextModal.innerHTML = resultText.innerHTML;
         cta.textContent = "Entrar no grupo do Coral";
         cta.href = GROUP_INVITE_LINK || "#";
+        ctaModal.textContent = cta.textContent;
+        ctaModal.href = cta.href;
+        ctaModal.dataset.mode = "link";
+        ctaModal.hidden = false;
+        ctaModal.style.display = "flex";
         hint.textContent = "Se o link não abrir, fale comigo no WhatsApp que eu te adiciono.";
-      } else {
+        hintModal.textContent = hint.textContent;
+      } else if(score >= 5){
+        resultModalIcon.className = "modal-icon";
+        scorePill.classList.add("mid");
+        const contact = CONTACTS.xandy;
         pill.className = "pill warn";
         pill.textContent = "Contato rápido";
+        resultModalIcon.innerHTML = `<img class="avatar" src="${contact.avatar}" alt="${contact.name}" />`;
+        resultModalTitle.textContent = `Falar com ${contact.name}`;
+        resultModalSub.textContent = "Redirecionamento para atendimento";
         resultText.innerHTML = `
           <strong>Olá ${name}!</strong>
           <div class="result-sub">Antes de entrar no grupo, precisamos alinhar voz, base e rotina de ensaio. É rápido.</div>
         `;
-        const msg = buildMessage(data, "Conversa com você primeiro");
-        cta.textContent = "Falar no WhatsApp";
-        cta.href = `https://wa.me/${LEADER_NUMBER}?text=${encodeURIComponent(msg)}`;
+        resultTextModal.innerHTML = resultText.innerHTML;
+        const msg = buildMessage(data, `Conversa com ${contact.name} • Nota ${score}/10`);
+        cta.textContent = `Falar com ${contact.name}`;
+        cta.href = `https://api.whatsapp.com/send?phone=${contact.phone}&text=${encodeURIComponent(msg)}`;
+        ctaModal.textContent = cta.textContent;
+        ctaModal.href = cta.href;
+        ctaModal.dataset.mode = "whatsapp";
+        ctaModal.dataset.phone = contact.phone;
+        ctaModal.dataset.text = msg;
+        ctaModal.hidden = false;
+        ctaModal.style.display = "flex";
         hint.textContent = "Contato direto para orientação.";
+        hintModal.textContent = hint.textContent;
+      } else {
+        resultModalIcon.className = "modal-icon danger";
+        scorePill.classList.add("low");
+        pill.className = "pill warn";
+        pill.textContent = "Não aprovado";
+        resultModalIcon.innerHTML = '<i class="ph ph-x-circle-fill"></i>';
+        resultModalTitle.textContent = "Infelizmente você não passou";
+        resultModalSub.textContent = "Não foi possível avançar";
+        resultText.innerHTML = `
+          <strong>Olá ${name}!</strong>
+          <div class="result-sub">Para cantar na Festa de Purim (07 de março de 2026), precisamos de mais ensaio e um pouco mais de experiência. Continue praticando e volte a se inscrever na próxima festa.</div>
+        `;
+        resultTextModal.innerHTML = resultText.innerHTML;
+        ctaModal.hidden = true;
+        ctaModal.style.display = "none";
+        ctaModal.removeAttribute("href");
+        delete ctaModal.dataset.mode;
+        delete ctaModal.dataset.phone;
+        delete ctaModal.dataset.text;
+        hint.textContent = "";
+        hintModal.textContent = "";
       }
 
-      result.style.display = "block";
+      result.style.display = "none";
+      showResultModal();
+    });
+
+    ageModalClose.addEventListener("click", hideAgeModal);
+    ageModal.addEventListener("click", (e) => {
+      if(e.target === ageModal) hideAgeModal();
+    });
+    resultModalClose.addEventListener("click", hideResultModal);
+    resultModal.addEventListener("click", (e) => {
+      if(e.target === resultModal) hideResultModal();
+    });
+    ctaModal.addEventListener("click", (e) => {
+      if(ctaModal.dataset.mode === "whatsapp"){
+        e.preventDefault();
+        openWhatsApp(ctaModal.dataset.phone, ctaModal.dataset.text);
+      }
     });
 
     // init
+    if(dobDay && dobMonth && dobYear){
+      for(let d = 1; d <= 31; d++){
+        const opt = document.createElement("option");
+        opt.value = String(d);
+        opt.textContent = String(d);
+        dobDay.appendChild(opt);
+      }
+      const months = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+      months.forEach((m, idx) => {
+        const opt = document.createElement("option");
+        opt.value = String(idx + 1);
+        opt.textContent = m;
+        dobMonth.appendChild(opt);
+      });
+      const currentYear = new Date().getFullYear();
+      for(let y = currentYear; y >= 1900; y--){
+        const opt = document.createElement("option");
+        opt.value = String(y);
+        opt.textContent = String(y);
+        dobYear.appendChild(opt);
+      }
+    }
     showStep(currentStep);
   </script>
 </body>
